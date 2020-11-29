@@ -7,13 +7,14 @@
 
 import UIKit
 
-class HeadLabel: UILabel {
+final class HeadLabel: UILabel {
     
     //MARK: - Lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         textColor = .white
+        numberOfLines = 0
     }
     
     convenience init(text: String, font: UIFont) {
