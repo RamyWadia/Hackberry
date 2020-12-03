@@ -37,7 +37,7 @@ final class MainPageHeader: UICollectionReusableView {
         menuButton.setImage(UIImage(systemName: "text.justifyright"), for: .normal)
         menuButton.tintColor = .hackberryOrangePink
         view.addSubview(menuButton)
-        menuButton.setDimensions(width: 50, height: 50)
+        menuButton.anchor(width: 50)
         menuButton.anchor(top: titleImage.topAnchor, bottom: titleImage.bottomAnchor, right: view.safeAreaLayoutGuide.rightAnchor, paddingRight: 20)
         menuButton.addTarget(self, action: #selector(handleMenuButtonTapped), for: .touchUpInside)
         
@@ -84,17 +84,15 @@ final class MainPageHeader: UICollectionReusableView {
         super.init(frame: frame)
         
         refreshImageConstraints()
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshImageConstraints), name: UIDevice.orientationDidChangeNotification, object: nil)
+        observeOrientation()
         configureUI()
-    }
-    
-    override func willTransition(from oldLayout: UICollectionViewLayout, to newLayout: UICollectionViewLayout) {
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+
     
     //MARK: - Selectors
     
@@ -121,8 +119,13 @@ final class MainPageHeader: UICollectionReusableView {
         NSLayoutConstraint.activate([headImageWidth, headImageHeight, stackWidth])
         print("DEBUG: Did change orientation")
     }
+
     
     //MARK: - Helpers
+    
+    func observeOrientation() {
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshImageConstraints), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
     
     fileprivate func configureUI() {
         addSubview(background)

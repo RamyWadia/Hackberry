@@ -13,12 +13,14 @@ final class FooterButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        titleLabel?.font = UIFont.systemFont(ofSize: 18)
     }
     
-    convenience init(text: String, color: UIColor, target: Selector) {
+    convenience init(text: String, color: UIColor, target: MainPageFooter, action: Selector) {
         self.init()
         self.setTitle(text, for: .normal)
-        self.tintColor = color
+        self.setTitleColor(color, for: .normal)
+        addTarget(target, action: action, for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {

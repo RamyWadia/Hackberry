@@ -22,6 +22,7 @@
 		58D7DAAB2573000800FC41EB /* headLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D7DAAA2573000800FC41EB /* headLabel.swift */; };
 		58D7DAB32573998700FC41EB /* HackberryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D7DAB22573998700FC41EB /* HackberryViewController.swift */; };
 		58D7DABB2573A55F00FC41EB /* MainPageHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D7DABA2573A55F00FC41EB /* MainPageHeader.swift */; };
+		58FC31452579772C00E123A0 /* FooterBoldLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FC31442579772C00E123A0 /* FooterBoldLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		58D7DAAA2573000800FC41EB /* headLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = headLabel.swift; sourceTree = "<group>"; };
 		58D7DAB22573998700FC41EB /* HackberryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HackberryViewController.swift; sourceTree = "<group>"; };
 		58D7DABA2573A55F00FC41EB /* MainPageHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageHeader.swift; sourceTree = "<group>"; };
+		58FC31442579772C00E123A0 /* FooterBoldLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterBoldLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +121,6 @@
 				58D7DA932572CAB700FC41EB /* Controller */,
 				58D7DA492572BD3500FC41EB /* AppDelegate.swift */,
 				58D7DA4B2572BD3500FC41EB /* SceneDelegate.swift */,
-				58D7DA522572BD3500FC41EB /* Assets.xcassets */,
 				58D7DA542572BD3500FC41EB /* LaunchScreen.storyboard */,
 				58D7DA572572BD3500FC41EB /* Info.plist */,
 			);
@@ -139,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				58D7DA6B2572BD3600FC41EB /* HackberryUITests.swift */,
+				58D7DA522572BD3500FC41EB /* Assets.xcassets */,
 				58D7DA6D2572BD3600FC41EB /* Info.plist */,
 			);
 			path = HackberryUITests;
@@ -156,11 +158,12 @@
 			isa = PBXGroup;
 			children = (
 				58D7DAAA2573000800FC41EB /* headLabel.swift */,
-				585898DC2573E94300723F2D /* FooterLabel.swift */,
-				585898E12573EB2600723F2D /* FooterButton.swift */,
 				58D7DABA2573A55F00FC41EB /* MainPageHeader.swift */,
 				585898C92573CF6900723F2D /* MainPageTableViewCell.swift */,
 				585898D12573E21A00723F2D /* MainPageFooter.swift */,
+				585898DC2573E94300723F2D /* FooterLabel.swift */,
+				58FC31442579772C00E123A0 /* FooterBoldLabel.swift */,
+				585898E12573EB2600723F2D /* FooterButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 				585898DD2573E94300723F2D /* FooterLabel.swift in Sources */,
 				58D7DAB32573998700FC41EB /* HackberryViewController.swift in Sources */,
 				585898CA2573CF6900723F2D /* MainPageTableViewCell.swift in Sources */,
+				58FC31452579772C00E123A0 /* FooterBoldLabel.swift in Sources */,
 				58D7DA992572CB2700FC41EB /* UIColor+Ext.swift in Sources */,
 				58D7DABB2573A55F00FC41EB /* MainPageHeader.swift in Sources */,
 				58D7DAA12572CF7400FC41EB /* UIView+Ext.swift in Sources */,

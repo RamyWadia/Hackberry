@@ -17,27 +17,29 @@ final class HackberryViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshConstraints()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshConstraints), name: UIDevice.orientationDidChangeNotification, object: nil)
-        
         configureCollectionView()
         configureUI()
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        refreshConstraints()
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        let header = MainPageHeader()
     }
+    
+    
     
     //MARK: - Selectors
     
-    @objc func refreshConstraints() {
+    @objc func refreshConstraints() -> CGFloat {
+        
+        var height: CGFloat = 750
         if UIDevice.current.orientation.isLandscape {
-            headerHeight = 750
+           height = 750
         }
         if UIDevice.current.orientation.isPortrait {
-            headerHeight = 650
+            height =  650
         }
-        collectionView.reloadData()
+        return height
     }
     
     
@@ -50,7 +52,6 @@ final class HackberryViewController: UICollectionViewController {
         collectionView.register(MainPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: MainPageHeader.reuseID)
         collectionView.register(MainPageTableViewCell.self, forCellWithReuseIdentifier: MainPageTableViewCell.reuseID)
         collectionView.register(MainPageFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: MainPageFooter.reuseID)
-        
     }
     
     fileprivate func configureUI() {
@@ -93,12 +94,11 @@ extension HackberryViewController {
 
 extension HackberryViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        
-        return CGSize(width: view.frame.width, height: headerHeight)
+        return CGSize(width: view.frame.width, height: refreshConstraints())
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 600)
+        return CGSize(width: view.frame.width, height: 800)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -110,6 +110,7 @@ extension HackberryViewController: UICollectionViewDelegateFlowLayout {
     }
     
 }
+
 
 //MARK: - MainViewHeaderDelegate
 

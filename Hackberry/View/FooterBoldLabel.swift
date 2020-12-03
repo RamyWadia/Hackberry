@@ -1,17 +1,17 @@
 //
-//  FooterLabel.swift
+//  FooterBoldLabel.swift
 //  Hackberry
 //
-//  Created by Ramy Atalla on 2020-11-29.
+//  Created by Ramy Atalla on 2020-12-03.
 //
 
 import UIKit
 
-final class FooterLabel: UILabel {
+final class FooterBoldLabel: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        font = UIFont.systemFont(ofSize: 16)
+        font = UIFont.boldSystemFont(ofSize: 16)
         numberOfLines = 0
         lineBreakMode = .byWordWrapping
     }
