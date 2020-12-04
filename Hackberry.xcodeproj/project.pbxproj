@@ -23,6 +23,7 @@
 		58D7DAB32573998700FC41EB /* HackberryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D7DAB22573998700FC41EB /* HackberryViewController.swift */; };
 		58D7DABB2573A55F00FC41EB /* MainPageHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D7DABA2573A55F00FC41EB /* MainPageHeader.swift */; };
 		58FC31452579772C00E123A0 /* FooterBoldLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FC31442579772C00E123A0 /* FooterBoldLabel.swift */; };
+		58FC314E2579921800E123A0 /* MainPageHeaderLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FC314D2579921800E123A0 /* MainPageHeaderLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		58D7DAB22573998700FC41EB /* HackberryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HackberryViewController.swift; sourceTree = "<group>"; };
 		58D7DABA2573A55F00FC41EB /* MainPageHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageHeader.swift; sourceTree = "<group>"; };
 		58FC31442579772C00E123A0 /* FooterBoldLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterBoldLabel.swift; sourceTree = "<group>"; };
+		58FC314D2579921800E123A0 /* MainPageHeaderLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageHeaderLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 		58D7DA482572BD3500FC41EB /* Hackberry */ = {
 			isa = PBXGroup;
 			children = (
+				58FC314C257991F800E123A0 /* Helpers */,
 				58D7DA972572CB0C00FC41EB /* Utilities */,
 				58D7DA952572CAD200FC41EB /* Model */,
 				58D7DA942572CAC000FC41EB /* View */,
@@ -182,6 +185,14 @@
 				58D7DAA02572CF7400FC41EB /* UIView+Ext.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		58FC314C257991F800E123A0 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				58FC314D2579921800E123A0 /* MainPageHeaderLayout.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,6 +327,7 @@
 				58D7DAAB2573000800FC41EB /* headLabel.swift in Sources */,
 				585898DD2573E94300723F2D /* FooterLabel.swift in Sources */,
 				58D7DAB32573998700FC41EB /* HackberryViewController.swift in Sources */,
+				58FC314E2579921800E123A0 /* MainPageHeaderLayout.swift in Sources */,
 				585898CA2573CF6900723F2D /* MainPageTableViewCell.swift in Sources */,
 				58FC31452579772C00E123A0 /* FooterBoldLabel.swift in Sources */,
 				58D7DA992572CB2700FC41EB /* UIColor+Ext.swift in Sources */,

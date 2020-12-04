@@ -112,7 +112,7 @@ final class MainPageHeader: UICollectionReusableView {
             headImageHeight = headImage.heightAnchor.constraint(equalToConstant: frame.height * (3/6))
             stackWidth = stack.widthAnchor.constraint(equalToConstant: frame.width * (5/7))
         } else {
-            headImageWidth = headImage.widthAnchor.constraint(equalToConstant: frame.width * (6/7))
+            headImageWidth = headImage.widthAnchor.constraint(equalToConstant: frame.width * (6/7) )
             headImageHeight = headImage.heightAnchor.constraint(equalToConstant: frame.width * (3/6))
             stackWidth = stack.widthAnchor.constraint(equalToConstant: frame.width * (6/7))
         }

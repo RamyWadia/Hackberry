@@ -13,6 +13,10 @@ final class HackberryViewController: UICollectionViewController {
     var options = ["MOBIL", "ANALYS", "JOBBA HÄR", "OM OSS"]
     var headerHeight: CGFloat = 750
     
+    var headerView: MainPageHeader?
+    
+    var animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear, animations: nil)
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -20,12 +24,8 @@ final class HackberryViewController: UICollectionViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(refreshConstraints), name: UIDevice.orientationDidChangeNotification, object: nil)
         configureCollectionView()
         configureUI()
+        setUpVisualEffectBlur()
     }
-    
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        let header = MainPageHeader()
-    }
-    
     
     
     //MARK: - Selectors
@@ -44,6 +44,19 @@ final class HackberryViewController: UICollectionViewController {
     
     
     //MARK: - Helpers
+    
+    fileprivate func setUpVisualEffectBlur() {
+        animator.addAnimations { [weak self] in
+            guard let self = self else { return }
+            let blurEffect = UIBlurEffect(style: .regular)
+            let visualEffectView = UIVisualEffectView(effect: blurEffect)
+            
+            self.view.addSubview(visualEffectView)
+            visualEffectView.addConstraintsToFillView(self.view)
+            visualEffectView.alpha = 0
+        }
+        animator.fractionComplete = 1
+    }
     
     fileprivate func  configureCollectionView() {
         collectionView.delegate = self
@@ -65,9 +78,9 @@ extension HackberryViewController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MainPageHeader.reuseID, for: indexPath) as! MainPageHeader
-            header.delegate = self
-            return header
+            headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MainPageHeader.reuseID, for: indexPath) as? MainPageHeader
+            headerView?.delegate = self
+            return headerView!
         case UICollectionView.elementKindSectionFooter:
             let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MainPageFooter.reuseID, for: indexPath) as! MainPageFooter
             footer.delegate = self
@@ -109,6 +122,14 @@ extension HackberryViewController: UICollectionViewDelegateFlowLayout {
         return 0
     }
     
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOfsetY = scrollView.contentOffset.y
+        if contentOfsetY > 0 {
+            return
+        }
+        animator.fractionComplete =  1 - (abs(contentOfsetY) / 100)
+        print("DEBUc: \(animator.fractionComplete)")
+    }
 }
 
 
