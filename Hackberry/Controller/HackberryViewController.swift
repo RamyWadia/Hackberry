@@ -10,12 +10,13 @@ import UIKit
 final class HackberryViewController: UICollectionViewController {
     //MARK: - Properties
     
-    var options = ["MOBIL", "ANALYS", "JOBBA HÄR", "OM OSS"]
+    var options: [MenuOptions] = [.mobile, .analytics, .workHere, .aboutUs]
     var headerHeight: CGFloat = 750
     
     var headerView: MainPageHeader?
     
-    var animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear, animations: nil)
+    var animator: UIViewPropertyAnimator!
+    let menuView = MenuView()
     
     //MARK: - Lifecycle
     
@@ -46,16 +47,16 @@ final class HackberryViewController: UICollectionViewController {
     //MARK: - Helpers
     
     fileprivate func setUpVisualEffectBlur() {
-        animator.addAnimations { [weak self] in
-            guard let self = self else { return }
-            let blurEffect = UIBlurEffect(style: .regular)
-            let visualEffectView = UIVisualEffectView(effect: blurEffect)
-            
-            self.view.addSubview(visualEffectView)
-            visualEffectView.addConstraintsToFillView(self.view)
-            visualEffectView.alpha = 0
-        }
-        animator.fractionComplete = 1
+        animator = UIViewPropertyAnimator(duration: 2, curve: .linear) { [weak self] in
+                guard let self = self else { return }
+                let blurEffect = UIBlurEffect(style: .regular)
+                let visualEffectView = UIVisualEffectView(effect: blurEffect)
+                
+                self.view.addSubview(visualEffectView)
+                visualEffectView.addConstraintsToFillView(self.view)
+                visualEffectView.alpha = 0
+            }
+            animator.fractionComplete = 1
     }
     
     fileprivate func  configureCollectionView() {
@@ -63,12 +64,17 @@ final class HackberryViewController: UICollectionViewController {
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.backgroundColor = .white
         collectionView.register(MainPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: MainPageHeader.reuseID)
-        collectionView.register(MainPageTableViewCell.self, forCellWithReuseIdentifier: MainPageTableViewCell.reuseID)
+        collectionView.register(MainPageCollectionViewCell.self, forCellWithReuseIdentifier: MainPageCollectionViewCell.reuseID)
         collectionView.register(MainPageFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: MainPageFooter.reuseID)
     }
     
     fileprivate func configureUI() {
         navigationController?.navigationBar.isHidden = true
+        
+    }
+    
+    func navigateTo(_ contoller: UIViewController) {
+        navigationController?.pushViewController(contoller, animated: true)
     }
 }
 
@@ -90,18 +96,25 @@ extension HackberryViewController {
         }
     }
     
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return options.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainPageTableViewCell.reuseID, for: indexPath) as! MainPageTableViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainPageCollectionViewCell.reuseID, for: indexPath) as! MainPageCollectionViewCell
         cell.option = options[indexPath.item]
         return cell
     }
 }
 
+//MARK: - UICollectionViewDelegate
+
+extension HackberryViewController {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let page = options[indexPath.item]
+        navigateTo(page.controller)
+    }
+}
 
 //MARK: - UICollectionViewDelegateFlowLayout
 
@@ -125,10 +138,12 @@ extension HackberryViewController: UICollectionViewDelegateFlowLayout {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentOfsetY = scrollView.contentOffset.y
         if contentOfsetY > 0 {
+            if contentOfsetY > view.frame.height * (9/10) {
+                headerView?.hideMenuView()
+            }
             return
         }
         animator.fractionComplete =  1 - (abs(contentOfsetY) / 100)
-        print("DEBUc: \(animator.fractionComplete)")
     }
 }
 
@@ -136,39 +151,36 @@ extension HackberryViewController: UICollectionViewDelegateFlowLayout {
 //MARK: - MainViewHeaderDelegate
 
 extension HackberryViewController: MainViewHeaderDelegate {
-    func handleMenuButtonTapped(_ header: UICollectionReusableView) {
-        print("DEBUG: Menu Button Tapped")
-    }
-    
+
     func handleContactTapped(_ header: UICollectionReusableView) {
-        print("DEBUG: Contact Button Tapped")
+        navigateTo(ContactUsController())
     }
 }
 
+//MARK: - MainPageFooterDelegate
+
 extension HackberryViewController: MainPageFooterDelegate {
     func handleMobileButtonTapped(_ footer: UICollectionReusableView) {
-        print("DEBUG: mobile")
+        navigateTo(MobileController())
     }
     
     func handleAnalysButtonTapped(_ footer: UICollectionReusableView) {
-        print("DEBUG: analys")
+        navigateTo(AnalysController())
     }
     
     func handleWorkHereButtonTapped(_ footer: UICollectionReusableView) {
-        print("DEBUG: work here")
+        navigateTo(WorkHereController())
     }
     
     func handleAboutUsButtonTapped(_ footer: UICollectionReusableView) {
-        print("DEBUG: about us")
+        navigateTo(AboutUsController())
     }
     
     func handleContactButtonTapped(_ footer: UICollectionReusableView) {
-        print("DEBUG: contact")
+        navigateTo(ContactUsController())
     }
     
     func handlePrivacyPolicyButtonTapped(_ footer: UICollectionReusableView) {
-        print("DEBUG: privacy policy")
+        navigateTo(PrivacyPolicyController())
     }
-    
-    
 }

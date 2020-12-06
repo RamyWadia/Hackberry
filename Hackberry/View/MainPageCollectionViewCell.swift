@@ -7,11 +7,12 @@
 
 import UIKit
 
-final class MainPageTableViewCell: UICollectionViewCell {
+final class MainPageCollectionViewCell: UICollectionViewCell {
     
     //MARK: - Properties
     static let reuseID = "reuseID "
-    var option = "" {
+    
+    var option: MenuOptions! {
         didSet { configure() }
     }
     
@@ -35,7 +36,6 @@ final class MainPageTableViewCell: UICollectionViewCell {
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
         configureUI()
     }
     
@@ -46,26 +46,9 @@ final class MainPageTableViewCell: UICollectionViewCell {
     //MARK: - Helpers
     
     fileprivate func configure() {
-        switch option {
-        case "MOBIL":
-            backgroundColor = .hackberryOrangePink
-            imageView.image = UIImage(named: "mobile-icon")
-            label.text = option
-        case "ANALYS":
-            backgroundColor = .hackberryPurble
-            imageView.image = UIImage(named: "analytics")
-            label.text = option
-        case "JOBBA HÄR":
-            backgroundColor = .hackberryOrangePink
-            imageView.image = UIImage(named: "work-here")
-            label.text = option
-        case "OM OSS":
-            backgroundColor = .hackberryPurble
-            imageView.image = UIImage(named: "footer-small-logo")
-            label.text = option
-
-        default: assert(true, "unexpected Cell Option")
-        }
+        backgroundColor = option.backgroundColor
+        label.text = option.text
+        imageView.image = option.image
     }
     
     fileprivate func configureUI() {
@@ -80,6 +63,5 @@ final class MainPageTableViewCell: UICollectionViewCell {
         
         addSubview(stack)
         stack.anchor(top: topAnchor, left: safeAreaLayoutGuide.leftAnchor, bottom: bottomAnchor, paddingTop: 20, paddingLeft: 20, paddingBottom: 20)
-        
     }
 }

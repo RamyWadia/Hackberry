@@ -9,13 +9,15 @@ import UIKit
 
 protocol MainViewHeaderDelegate: class {
     func handleContactTapped(_ header: UICollectionReusableView)
-    func handleMenuButtonTapped(_ header: UICollectionReusableView)
+    func navigateTo(_ contoller: UIViewController)
 }
 
 final class MainPageHeader: UICollectionReusableView {
     //MARK: - Properties
     static let reuseID = "reuseID"
     weak var delegate: MainViewHeaderDelegate?
+    
+    var menuView = MenuView()
     
     private let background: UIImageView = {
         let iv = UIImageView()
@@ -44,7 +46,7 @@ final class MainPageHeader: UICollectionReusableView {
         return view
     }()
     
-    let headImage: UIImageView = {
+    var headImage: UIImageView = {
         let iv = UIImageView(image: UIImage(named: "MOBILE BY DESIGN"))
         return iv
     }()
@@ -77,22 +79,22 @@ final class MainPageHeader: UICollectionReusableView {
     var headImageWidth = NSLayoutConstraint()
     var headImageHeight = NSLayoutConstraint()
     var stackWidth = NSLayoutConstraint()
+    var menuViewHeight = NSLayoutConstraint()
+    
+    var isMenuOpen = false
     
     //MARK: - Lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        refreshImageConstraints()
-        observeOrientation()
+        menuView.delegate = self
         configureUI()
+        observeOrientation()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-
     
     //MARK: - Selectors
     
@@ -101,27 +103,50 @@ final class MainPageHeader: UICollectionReusableView {
     }
     
     @objc func handleMenuButtonTapped() {
-        delegate?.handleMenuButtonTapped(self)
+        if isMenuOpen == false {
+            showMenuView()
+        } else {
+            hideMenuView()
+        }
     }
     
     @objc func refreshImageConstraints() {
-        NSLayoutConstraint.deactivate([headImageWidth, headImageHeight, stackWidth])
+        NSLayoutConstraint.deactivate([headImageWidth, headImageHeight, stackWidth, menuViewHeight])
         
         if frame.width > frame.height {
             headImageWidth = headImage.widthAnchor.constraint(equalToConstant: frame.width * (6/7))
             headImageHeight = headImage.heightAnchor.constraint(equalToConstant: frame.height * (3/6))
             stackWidth = stack.widthAnchor.constraint(equalToConstant: frame.width * (5/7))
+            menuViewHeight = menuView.heightAnchor.constraint(equalToConstant: frame.height * (6/10))
         } else {
             headImageWidth = headImage.widthAnchor.constraint(equalToConstant: frame.width * (6/7) )
             headImageHeight = headImage.heightAnchor.constraint(equalToConstant: frame.width * (3/6))
             stackWidth = stack.widthAnchor.constraint(equalToConstant: frame.width * (6/7))
+            menuViewHeight = menuView.heightAnchor.constraint(equalToConstant: frame.height * (7/10))
         }
-        NSLayoutConstraint.activate([headImageWidth, headImageHeight, stackWidth])
-        print("DEBUG: Did change orientation")
+        NSLayoutConstraint.activate([headImageWidth, headImageHeight, stackWidth, menuViewHeight])
     }
 
     
     //MARK: - Helpers
+    
+    fileprivate func showMenuView() {
+        UIView.animate(withDuration: 0.5) { [weak self] in
+            guard let self = self else { return }
+            self.menuView.alpha = 1
+        } completion: { _ in
+            self.isMenuOpen = true
+        }
+    }
+    
+    func hideMenuView() {
+        UIView.animate(withDuration: 0.8) { [weak self] in
+            guard let self = self else { return }
+            self.menuView.alpha = 0
+        } completion: { _  in
+            self.isMenuOpen = false
+        }
+    }
     
     func observeOrientation() {
         NotificationCenter.default.addObserver(self, selector: #selector(refreshImageConstraints), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -141,11 +166,24 @@ final class MainPageHeader: UICollectionReusableView {
         addSubview(headImage)
         headImage.anchor(top: titleView.bottomAnchor, paddingTop: 30)
         headImage.centerX(inView: self)
-        [headImageWidth, headImageHeight].forEach({$0.isActive = true})
+        refreshImageConstraints()
         
         addSubview(stack)
         stack.anchor(top: headImage.bottomAnchor)
         stack.centerX(inView: self)
-        stackWidth.isActive = true
+
+        addSubview(menuView)
+        menuView.setContentHuggingPriority(UILayoutPriority(rawValue: 249), for: .vertical)
+        menuView.setContentCompressionResistancePriority(UILayoutPriority(749), for: .vertical)
+        menuView.anchor(top: titleView.bottomAnchor, left: leftAnchor, right: rightAnchor)
     }
 }
+
+extension MainPageHeader: MenuViewDelegate {
+    func navigateTo(_ contoller: UIViewController) {
+        delegate?.navigateTo(contoller)
+    }
+}
+
+
+
