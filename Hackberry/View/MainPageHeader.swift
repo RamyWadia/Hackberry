@@ -25,33 +25,15 @@ final class MainPageHeader: UICollectionReusableView {
         return iv
     }()
     
-    private lazy var titleView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        
-        var titleImage = UIImageView(image: UIImage(named: "Hackberry_Primary_Logo"))
-        view.addSubview(titleImage)
-        titleImage.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 20).isActive = true
-        titleImage.anchor(left: view.safeAreaLayoutGuide.leftAnchor, paddingLeft: 30)
-        titleImage.setDimensions(width: 150, height: 33)
-        
-        let menuButton = UIButton(type: .system)
-        menuButton.setImage(UIImage(systemName: "text.justifyright"), for: .normal)
-        menuButton.tintColor = .hackberryOrangePink
-        view.addSubview(menuButton)
-        menuButton.anchor(width: 50)
-        menuButton.anchor(top: titleImage.topAnchor, bottom: titleImage.bottomAnchor, right: view.safeAreaLayoutGuide.rightAnchor, paddingRight: 20)
-        menuButton.addTarget(self, action: #selector(handleMenuButtonTapped), for: .touchUpInside)
-        
-        return view
-    }()
+    private lazy var titleView = TitleView()
     
     var headImage: UIImageView = {
         let iv = UIImageView(image: UIImage(named: "MOBILE BY DESIGN"))
+        iv.isUserInteractionEnabled = true
         return iv
     }()
     
-    private lazy var stack: UIStackView = {
+    private var stack: UIStackView = {
         
         let label1 = HeadLabel(text: "Vi är en byrå med fullt fokus på innovation.", font: UIFont.boldSystemFont(ofSize: 30))
         let label2 = HeadLabel(text: "Vi skapar fantastiska appar. Vi skapar data-drivna organisationer. Och vi vet att vi kan leverera ett mätbart resultat. Med grymt nöjda användare.", font: UIFont.systemFont(ofSize: 16))
@@ -70,8 +52,8 @@ final class MainPageHeader: UICollectionReusableView {
         button.backgroundColor = .hackberryOrangePink
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        button.layer.cornerRadius = 44 / 2
-        button.setDimensions(width: 120, height: 44)
+        button.layer.cornerRadius = 50 / 2
+        button.setDimensions(width: 120, height: 50)
         button.addTarget(self, action: #selector(handleContactTapped), for: .touchUpInside)
         return button
     }()
@@ -102,27 +84,21 @@ final class MainPageHeader: UICollectionReusableView {
         delegate?.handleContactTapped(self)
     }
     
-    @objc func handleMenuButtonTapped() {
-        if isMenuOpen == false {
-            showMenuView()
-        } else {
-            hideMenuView()
-        }
-    }
-    
     @objc func refreshImageConstraints() {
         NSLayoutConstraint.deactivate([headImageWidth, headImageHeight, stackWidth, menuViewHeight])
+        let attribute = NSLayoutConstraint.Attribute.self
+        let relation = NSLayoutConstraint.Relation.self
         
         if frame.width > frame.height {
-            headImageWidth = headImage.widthAnchor.constraint(equalToConstant: frame.width * (6/7))
-            headImageHeight = headImage.heightAnchor.constraint(equalToConstant: frame.height * (3/6))
-            stackWidth = stack.widthAnchor.constraint(equalToConstant: frame.width * (5/7))
-            menuViewHeight = menuView.heightAnchor.constraint(equalToConstant: frame.height * (6/10))
+            headImageWidth = NSLayoutConstraint(item: headImage, attribute: attribute.width, relatedBy: relation.equal, toItem: background, attribute: attribute.width, multiplier: 6/7, constant: 0)
+            headImageHeight = NSLayoutConstraint(item: headImage, attribute: attribute.height, relatedBy: relation.equal, toItem: background, attribute: attribute.height, multiplier: 4/7, constant: 0)
+            stackWidth = NSLayoutConstraint(item: stack, attribute: attribute.width, relatedBy: relation.equal, toItem: background, attribute: attribute.width, multiplier: 5/7, constant: 0)
+            menuViewHeight = NSLayoutConstraint(item: menuView, attribute: attribute.height, relatedBy: relation.equal, toItem: background, attribute: attribute.height, multiplier: 6/10, constant: 0)
         } else {
-            headImageWidth = headImage.widthAnchor.constraint(equalToConstant: frame.width * (6/7) )
-            headImageHeight = headImage.heightAnchor.constraint(equalToConstant: frame.width * (3/6))
-            stackWidth = stack.widthAnchor.constraint(equalToConstant: frame.width * (6/7))
-            menuViewHeight = menuView.heightAnchor.constraint(equalToConstant: frame.height * (7/10))
+            headImageWidth = NSLayoutConstraint(item: headImage, attribute: attribute.width, relatedBy: relation.equal, toItem: background, attribute: attribute.width, multiplier: 6/7, constant: 0)
+            headImageHeight = NSLayoutConstraint(item: headImage, attribute: attribute.height, relatedBy: relation.equal, toItem: background, attribute: attribute.height, multiplier: 3/8, constant: 0)
+            stackWidth = NSLayoutConstraint(item: stack, attribute: attribute.width, relatedBy: relation.equal, toItem: background, attribute: attribute.width, multiplier: 6/7, constant: 0)
+            menuViewHeight = NSLayoutConstraint(item: menuView, attribute: attribute.height, relatedBy: relation.equal, toItem: background, attribute: attribute.height, multiplier: 6/10, constant: 0)
         }
         NSLayoutConstraint.activate([headImageWidth, headImageHeight, stackWidth, menuViewHeight])
     }
@@ -154,34 +130,49 @@ final class MainPageHeader: UICollectionReusableView {
     
     fileprivate func configureUI() {
         addSubview(background)
+        addSubview(titleView)
+        addSubview(headImage)
+        addSubview(stack)
+        addSubview(contactButton)
+        addSubview(menuView)
+        
         background.addConstraintsToFillView(self)
         
-        addSubview(titleView)
         titleView.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 110)
         
-        addSubview(contactButton)
-        contactButton.anchor(bottom: bottomAnchor, paddingBottom: 10)
-        contactButton.centerX(inView: self)
-        
-        addSubview(headImage)
         headImage.anchor(top: titleView.bottomAnchor, paddingTop: 30)
         headImage.centerX(inView: self)
         refreshImageConstraints()
         
-        addSubview(stack)
         stack.anchor(top: headImage.bottomAnchor)
         stack.centerX(inView: self)
+        
+        contactButton.anchor(top: stack.bottomAnchor, paddingTop: 25)
+        contactButton.centerX(inView: self)
 
-        addSubview(menuView)
         menuView.setContentHuggingPriority(UILayoutPriority(rawValue: 249), for: .vertical)
         menuView.setContentCompressionResistancePriority(UILayoutPriority(749), for: .vertical)
         menuView.anchor(top: titleView.bottomAnchor, left: leftAnchor, right: rightAnchor)
     }
 }
 
+//MARK: - MenuViewDelegate
+
 extension MainPageHeader: MenuViewDelegate {
     func navigateTo(_ contoller: UIViewController) {
         delegate?.navigateTo(contoller)
+    }
+}
+
+//MARK: - TitleViewDelegate
+
+extension MainPageHeader: TitleViewDelegate {
+    func handleMenuButtonTapped() {
+        if isMenuOpen == false {
+            showMenuView()
+        } else {
+            hideMenuView()
+        }
     }
 }
 

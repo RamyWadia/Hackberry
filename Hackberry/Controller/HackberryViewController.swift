@@ -11,7 +11,7 @@ final class HackberryViewController: UICollectionViewController {
     //MARK: - Properties
     
     var options: [MenuOptions] = [.mobile, .analytics, .workHere, .aboutUs]
-    var headerHeight: CGFloat = 750
+    var headerHeight: CGFloat = 700
     
     var headerView: MainPageHeader?
     
@@ -25,7 +25,6 @@ final class HackberryViewController: UICollectionViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(refreshConstraints), name: UIDevice.orientationDidChangeNotification, object: nil)
         configureCollectionView()
         configureUI()
-        setUpVisualEffectBlur()
     }
     
     
@@ -33,31 +32,17 @@ final class HackberryViewController: UICollectionViewController {
     
     @objc func refreshConstraints() -> CGFloat {
         
-        var height: CGFloat = 750
+        var height: CGFloat = 700
         if UIDevice.current.orientation.isLandscape {
-           height = 750
+           height = 850
         }
         if UIDevice.current.orientation.isPortrait {
-            height =  650
+            height =  700
         }
         return height
     }
     
-    
     //MARK: - Helpers
-    
-    fileprivate func setUpVisualEffectBlur() {
-        animator = UIViewPropertyAnimator(duration: 2, curve: .linear) { [weak self] in
-                guard let self = self else { return }
-                let blurEffect = UIBlurEffect(style: .regular)
-                let visualEffectView = UIVisualEffectView(effect: blurEffect)
-                
-                self.view.addSubview(visualEffectView)
-                visualEffectView.addConstraintsToFillView(self.view)
-                visualEffectView.alpha = 0
-            }
-            animator.fractionComplete = 1
-    }
     
     fileprivate func  configureCollectionView() {
         collectionView.delegate = self
@@ -70,7 +55,6 @@ final class HackberryViewController: UICollectionViewController {
     
     fileprivate func configureUI() {
         navigationController?.navigationBar.isHidden = true
-        
     }
     
     func navigateTo(_ contoller: UIViewController) {
@@ -137,13 +121,9 @@ extension HackberryViewController: UICollectionViewDelegateFlowLayout {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentOfsetY = scrollView.contentOffset.y
-        if contentOfsetY > 0 {
-            if contentOfsetY > view.frame.height * (9/10) {
-                headerView?.hideMenuView()
-            }
-            return
+        if contentOfsetY > view.frame.height * (9/10) {
+            headerView?.hideMenuView()
         }
-        animator.fractionComplete =  1 - (abs(contentOfsetY) / 100)
     }
 }
 
