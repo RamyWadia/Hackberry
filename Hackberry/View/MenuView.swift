@@ -8,7 +8,6 @@
 import UIKit
 
 protocol MenuViewDelegate: class {
-    func handleMenuButtonTapped()
     func navigateTo(_ contoller: UIViewController)
 }
 
@@ -72,7 +71,6 @@ extension MenuView: UITableViewDelegate, UITableViewDataSource {
 extension MenuView {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let page = options[indexPath.row].controller
-        delegate?.handleMenuButtonTapped()
         delegate?.navigateTo(page)
     }
 }

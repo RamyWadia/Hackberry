@@ -52,7 +52,9 @@ final class TitleView: UIView {
         addSubview(titleImage)
         titleImage.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 20).isActive = true
         titleImage.anchor(left: safeAreaLayoutGuide.leftAnchor, paddingLeft: 30)
-        titleImage.setDimensions(width: 150, height: 33)
+//        titleImage.setDimensions(width: 150, height: 33)
+        titleImage.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        titleImage.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 33/110).isActive = true
         
         addSubview(menuButton)
         menuButton.anchor(width: 50)

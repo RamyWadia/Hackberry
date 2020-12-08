@@ -13,25 +13,27 @@ final class HackberryViewController: UICollectionViewController {
     var options: [MenuOptions] = [.mobile, .analytics, .workHere, .aboutUs]
     var headerHeight: CGFloat = 700
     
-    var headerView: MainPageHeader?
-    
-    var animator: UIViewPropertyAnimator!
+    var headerView = CollectionViewHeader()
+
     let menuView = MenuView()
+    
+    let headerModel = HeaderModel(imageName: "MOBILE BY DESIGN", text1: "Vi är en byrå med fullt fokus på innovation.", text2: "Vi skapar fantastiska appar. Vi skapar data-drivna organisationer. Och vi vet att vi kan leverera ett mätbart resultat. Med grymt nöjda användare.", text3: "Välkommen att utmana oss, inget gör oss gladare.")
     
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(refreshConstraints), name: UIDevice.orientationDidChangeNotification, object: nil)
         configureCollectionView()
         configureUI()
+        print("DEBUG: from CollectionView \(String(describing: headerView.label1.text))")
+        
     }
-    
     
     //MARK: - Selectors
     
     @objc func refreshConstraints() -> CGFloat {
-        
         var height: CGFloat = 700
         if UIDevice.current.orientation.isLandscape {
            height = 850
@@ -48,7 +50,7 @@ final class HackberryViewController: UICollectionViewController {
         collectionView.delegate = self
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.backgroundColor = .white
-        collectionView.register(MainPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: MainPageHeader.reuseID)
+        collectionView.register(CollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CollectionViewHeader.reuseID)
         collectionView.register(MainPageCollectionViewCell.self, forCellWithReuseIdentifier: MainPageCollectionViewCell.reuseID)
         collectionView.register(MainPageFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: MainPageFooter.reuseID)
     }
@@ -68,9 +70,10 @@ extension HackberryViewController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MainPageHeader.reuseID, for: indexPath) as? MainPageHeader
-            headerView?.delegate = self
-            return headerView!
+            headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CollectionViewHeader.reuseID, for: indexPath) as! CollectionViewHeader
+            headerView.delegate = self
+            headerView.headerModel = headerModel
+            return headerView
         case UICollectionView.elementKindSectionFooter:
             let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MainPageFooter.reuseID, for: indexPath) as! MainPageFooter
             footer.delegate = self
@@ -122,15 +125,14 @@ extension HackberryViewController: UICollectionViewDelegateFlowLayout {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentOfsetY = scrollView.contentOffset.y
         if contentOfsetY > view.frame.height * (9/10) {
-            headerView?.hideMenuView()
+            headerView.hideMenuView()
         }
     }
 }
 
+//MARK: - CollectionViewHeaderDelegate
 
-//MARK: - MainViewHeaderDelegate
-
-extension HackberryViewController: MainViewHeaderDelegate {
+extension HackberryViewController: CollectionViewHeaderDelegate {
 
     func handleContactTapped(_ header: UICollectionReusableView) {
         navigateTo(ContactUsController())

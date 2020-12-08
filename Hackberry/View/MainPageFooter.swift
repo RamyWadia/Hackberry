@@ -110,19 +110,15 @@ final class MainPageFooter: UICollectionReusableView {
     
     fileprivate func configureUI() {
         backgroundColor = .hackberryPurble
-        let padding: CGFloat = 20
         
-        addSubview(stack1)
-        stack1.anchor(top: topAnchor, left: safeAreaLayoutGuide.leftAnchor, paddingTop: 40, paddingLeft: padding)
+        let stack = UIStackView(arrangedSubviews: [stack1, stack2, stack3, stack4])
+        stack.axis = .vertical
+        stack.spacing = 30
+        stack.alignment = .leading
         
-        addSubview(stack2)
-        stack2.anchor(top: stack1.bottomAnchor, left: safeAreaLayoutGuide.leftAnchor, paddingTop: 30, paddingLeft: padding)
+        addSubview(stack)
+        stack.anchor(top: topAnchor, left: safeAreaLayoutGuide.leftAnchor, paddingTop: 40, paddingLeft: 30)
         
-        addSubview(stack3)
-        stack3.anchor(top: stack2.bottomAnchor, left: safeAreaLayoutGuide.leftAnchor, paddingTop: 30, paddingLeft: padding)
-        
-        addSubview(stack4)
-        stack4.anchor(top: stack3.bottomAnchor, left: safeAreaLayoutGuide.leftAnchor, paddingTop: 30, paddingLeft: padding)
     }
 }
 
